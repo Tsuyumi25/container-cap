@@ -1,0 +1,40 @@
+:root {
+  font: 13px/1.5 system-ui, sans-serif;
+  color-scheme: light dark;
+  color: CanvasText;
+  background: Canvas;
+  --rule: color-mix(in srgb, CanvasText 18%, Canvas);
+  --muted: color-mix(in srgb, CanvasText 65%, Canvas);
+}
+body { margin: 0; width: 390px; }
+main { padding: 14px 16px; max-height: 560px; overflow-y: auto; }
+header, .activation { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+header { padding-bottom: 14px; }
+h1 { margin: 0; font-size: 15px; font-weight: 600; }
+p { margin: 8px 0; }
+.muted { color: var(--muted); }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.activation button { padding: 3px 11px; border: 1px solid var(--rule); border-radius: 3px; background: ButtonFace; }
+button:disabled { opacity: .5; cursor: default; }
+input { box-sizing: border-box; width: 100%; min-width: 0; padding: 4px 2px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent; text-align: right; font-variant-numeric: tabular-nums; }
+button:focus-visible, input:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+.default-limit { display: grid; grid-template-columns: 1fr 72px 42px; align-items: center; gap: 0; padding: 10px 0 18px; }
+.default-limit input { grid-column: 2; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.count-column { width: 58px; }
+.limit-column { width: 72px; }
+.reset-column { width: 42px; }
+th, td { padding: 6px 0; }
+thead { color: var(--muted); border-bottom: 1px solid var(--rule); }
+thead th { padding-top: 0; padding-bottom: 8px; font-size: 12px; font-weight: 400; }
+th { text-align: left; font-weight: 400; }
+tbody th label { display: block; padding-right: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.number { text-align: right; padding-right: 12px; font-variant-numeric: tabular-nums; }
+.full { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.reset { text-align: right; }
+.text-button { padding: 0; border: 0; background: none; color: var(--muted); font-size: 12px; }
+.text-button:hover { color: CanvasText; text-decoration: underline; }
+.error { color: light-dark(#a32020, #ffb4b4); overflow-wrap: anywhere; }
+.empty { padding: 12px 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
