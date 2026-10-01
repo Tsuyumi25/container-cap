@@ -38,12 +38,17 @@ test('pausing retains quota visibility', () => {
   assert.deepEqual([display.count, display.limit, display.remaining, display.enabled], [82, 100, 18, false]);
 });
 
-test('restored excess tabs keep their actual count and show zero remaining capacity', () => {
-  const display = quotaDisplay({
-    ...state,
-    containers: [{ ...state.containers[0]!, count: 120 }],
-  }, { id: 1, cookieStoreId: 'firefox-container-1' });
-  assert.deepEqual([display.count, display.limit, display.remaining], [120, 100, 0]);
+test('excess usage remains visible while paused and enabled as tabs close below the limit', () => {
+  for (const enabled of [false, true]) {
+    for (const [count, remaining] of [[120, -20], [101, -1], [100, 0], [99, 1]] as const) {
+      const display = quotaDisplay({
+        ...state,
+        enabled,
+        containers: [{ ...state.containers[0]!, count }],
+      }, { id: 1, cookieStoreId: 'firefox-container-1' });
+      assert.deepEqual([display.count, display.limit, display.remaining], [count, 100, remaining]);
+    }
+  }
 });
 
 test('native badges distinguish no quota from zero remaining and abbreviate without rounding up', () => {
@@ -52,6 +57,8 @@ test('native badges distinguish no quota from zero remaining and abbreviate with
     [1000, '1k'], [1999, '1k'], [999999, '999k'],
     [1000000, '1M'], [1000000000, '1B'],
     [1000000000000, '1T'], [Number.MAX_SAFE_INTEGER, '9P'],
+    [-1, '-1'], [-999, '-999'], [-1000, '-1k'], [-1999, '-1k'],
+    [-999999, '-999k'], [-1000000, '-1M'], [-Number.MAX_SAFE_INTEGER, '-9P'],
   ] as const) {
     assert.equal(remainingBadgeText(remaining), expected);
   }

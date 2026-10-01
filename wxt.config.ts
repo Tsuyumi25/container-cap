@@ -15,6 +15,16 @@ export default defineConfig({
     action: { default_icon: 'icon.svg' },
     permissions: ['tabs', 'cookies', 'contextualIdentities', 'storage', 'sessions'],
     incognito: 'not_allowed',
+    experiment_apis: {
+      zenTabs: {
+        schema: 'experiments/zen-tabs/schema.json',
+        parent: {
+          scopes: ['addon_parent'],
+          paths: [['zenTabs']],
+          script: 'experiments/zen-tabs/api.js',
+        },
+      },
+    },
     browser_specific_settings: {
       gecko: {
         id: 'container-cap@local',
@@ -28,6 +38,9 @@ export default defineConfig({
     binaries: { firefox: process.env.FIREFOX_BINARY ?? 'zen-beta' },
     firefoxProfile: profile,
     keepProfileChanges: true,
-    firefoxPref: { 'privacy.userContext.enabled': true },
+    firefoxPref: {
+      'privacy.userContext.enabled': true,
+      'extensions.experiments.enabled': true,
+    },
   },
 });

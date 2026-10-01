@@ -17,7 +17,7 @@ export function quotaDisplay(state: Snapshot, activeTab?: Tab): QuotaDisplay {
     name: container?.name ?? null,
     count: container?.count ?? null,
     limit: container?.limit ?? null,
-    remaining: container ? Math.max(0, container.limit - container.count) : null,
+    remaining: container ? container.limit - container.count : null,
     enabled: state.enabled,
     error: state.error,
   };
@@ -25,10 +25,11 @@ export function quotaDisplay(state: Snapshot, activeTab?: Tab): QuotaDisplay {
 
 export function remainingBadgeText(remaining: number | null): string {
   if (remaining === null) return '';
+  const magnitude = Math.abs(remaining);
   for (const [scale, suffix] of [
     [1e15, 'P'], [1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'k'],
   ] as const) {
-    if (remaining >= scale) return `${Math.floor(remaining / scale)}${suffix}`;
+    if (magnitude >= scale) return `${Math.trunc(remaining / scale)}${suffix}`;
   }
   return String(remaining);
 }

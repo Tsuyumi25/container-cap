@@ -5,11 +5,8 @@ import type { Request, Response, Session, Settings, Tab } from '../core/contract
 
 export default defineBackground(() => {
   const limiter = new ContainerLimiter({
-    async tabs() {
-      const tabs = await browser.tabs.query({});
-      return tabs.flatMap(tab => tab.id === undefined ? [] : [{
-        id: tab.id, cookieStoreId: tab.cookieStoreId, incognito: tab.incognito,
-      }]);
+    tabs() {
+      return browser.zenTabs.query();
     },
     async containers() {
       return browser.contextualIdentities.query({});
@@ -72,12 +69,15 @@ export default defineBackground(() => {
         const signature = JSON.stringify(display);
         if (shownBadges.get(windowId) === signature) continue;
         const status = display.enabled ? '已啟用' : '已暫停';
+        const capacity = display.remaining !== null && display.remaining < 0
+          ? `超出上限 ${-display.remaining} 個`
+          : `剩餘 ${display.remaining}`;
         let title = display.count === null
           ? `Container Cap：此分頁未使用 container · ${status}`
-          : `${display.name}：${display.count}/${display.limit} · 剩餘 ${display.remaining} · ${status}`;
+          : `${display.name}：${display.count}/${display.limit} · ${capacity} · ${status}`;
         if (display.error) title += `\n${display.error}`;
         const color = !display.enabled ? '#626a77'
-          : display.remaining === 0 ? '#a32020' : '#27323b';
+          : display.remaining !== null && display.remaining <= 0 ? '#a32020' : '#27323b';
         try {
           await Promise.all([
             browser.action.setBadgeText({ windowId, text: remainingBadgeText(display.remaining) }),

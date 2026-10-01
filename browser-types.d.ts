@@ -1,9 +1,13 @@
 import '@wxt-dev/browser';
 import type { ContextualIdentities, Sessions, Tabs } from 'webextension-polyfill';
+import type { Tab } from './core/contracts';
 
 declare module '@wxt-dev/browser' {
   namespace Browser {
     const contextualIdentities: ContextualIdentities.Static;
+    namespace zenTabs {
+      function query(): Promise<Tab[]>;
+    }
     namespace action {
       interface TitleDetails {
         windowId?: number;

@@ -1,0 +1,24 @@
+[
+  {
+    "namespace": "zenTabs",
+    "functions": [
+      {
+        "name": "query",
+        "type": "function",
+        "async": true,
+        "parameters": [],
+        "returns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "cookieStoreId": { "type": "string" },
+              "incognito": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    ]
+  }
+]
